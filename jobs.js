@@ -4,13 +4,16 @@ let vagasList = [];
 let vagaSearch = "";
 let vagaFilter = [];
 let candidate = "";
+let vagaIndex = "";
+let vagaDelete = 0;
+let vagasIndexCount = 0;
 
 const alertCandidate = function (maindata) {
   return "\nCandidato: " + maindata
 }
 
 const alertVaga = function (i){
-  alert("Vaga " + vagasList[i].indice + "\n" + vagasList[i].nome + "\nDescrição: " + vagasList[i].descricao + "\nData Limite: " + vagasList[i].dataLimite + "\nCandidatos Inscritos: " + vagasList[i].quantidadeDeCandidatos)
+  alert("Indíce: " + vagasList[i].indice + "\n" + vagasList[i].nome + "\nDescrição: " + vagasList[i].descricao + "\nData Limite: " + vagasList[i].dataLimite + "\nCandidatos Inscritos: " + vagasList[i].quantidadeDeCandidatos)
 }
 
 const vaga = {
@@ -36,13 +39,14 @@ do {
     break
     case "2":
     vagasList.push({})
-    vagasList[vagasQnt].indice = vagasQnt
+    vagasList[vagasQnt].indice = vagasIndexCount
     vagasList[vagasQnt].nome = prompt("Qual o nome para a vaga?")
     vagasList[vagasQnt].dataLimite = prompt("Qual a data limite para a vaga?")
     vagasList[vagasQnt].descricao = prompt("Qual a descrição para a vaga?")
     vagasList[vagasQnt].quantidadeDeCandidatos = 0;
     vagasList[vagasQnt].nomeDosCandidatos = "Nenhum candidato inscrito."
-    vagasQnt += 1; 
+    vagasQnt += 1;
+    vagasIndexCount += 1;  
     break
     case "3":
     vagaSearch = parseFloat(prompt("Qual o código da vaga que deseja buscar?"))
@@ -66,15 +70,33 @@ do {
     candidate = prompt("Qual o nome do candidato que quer adicionar na vaga?")
     if (vagaFilter[0].nomeDosCandidatos === "Nenhum candidato inscrito."){
       vagaFilter[0].nomeDosCandidatos = "- " + candidate;
+      vagaFilter[0].quantidadeDeCandidatos += 1;
     } else {
-    vagaFilter[0].nomeDosCandidatos += "\n- " + candidate;
+      vagaFilter[0].nomeDosCandidatos += "\n- " + candidate;
+      vagaFilter[0].quantidadeDeCandidatos += 1;
     }
     }
     break
-    case 5:
-    
+    case "5":
+    vagaSearch = parseFloat(prompt("Qual o índice da vaga que quer deletar?"))
+    vagaIndex = vagasList.findIndex(function(element){
+      if (element.indice != vagaSearch) {
+        return false;
+      } else {
+        return true;
+      }
+    })
+    if (vagaIndex === -1){
+      alert("Vaga não encontrada")
+    } else {
+     vagaDelete = confirm("Tem certeza que deseja deletar a vaga " + vagasList[vagaIndex].nome + " de indíce " + vagasList[vagaIndex].indice + "?")
+     if (vagaDelete === true){
+      vagasList.splice(vagaIndex,1)
+      vagasQnt -= 1; 
+     }
+    }
     break
-    case 6:
+    case "6":
     alert("Finalizando...")
     break
   }
